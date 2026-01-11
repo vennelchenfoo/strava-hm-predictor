@@ -135,8 +135,8 @@ If you're also training for a race and want to build something similar, the note
 Data Science & AI Bootcamp @ WBS Coding School  
 Career changer. Runner. Building with data.
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://linkedin.com/in/yourprofile)
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-black)](https://github.com/yourusername)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)]([https://linkedin.com/in/yourprofile](https://www.linkedin.com/in/vennelchenfoo/))
+[![GitHub](https://img.shields.io/badge/GitHub-Follow-black)]([https://github.com/yourusername](https://github.com/vennelchenfoo))
 
 ---
 
