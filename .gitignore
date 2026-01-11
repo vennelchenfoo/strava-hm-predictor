@@ -1,0 +1,39 @@
+# Data files (keep raw data private, share only samples)
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+# Keep external if you want to share reference data
+# data/external/*
+# !data/external/.gitkeep
+
+# Models (large files)
+models/*
+!models/.gitkeep
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+config/secrets.yaml

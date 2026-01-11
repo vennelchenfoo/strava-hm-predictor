@@ -1,0 +1,180 @@
+{
+  "name": "Get Bulk Activities",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "a93b2698-518c-4c29-b83d-9e99374092dc",
+      "name": "Start Bulk Extract",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        -176
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "returnAll": true
+      },
+      "id": "781cb451-110b-42c6-bec5-0a6f44a8b14a",
+      "name": "Get All Activities",
+      "type": "n8n-nodes-base.strava",
+      "typeVersion": 1.1,
+      "position": [
+        -112,
+        -176
+      ],
+      "credentials": {
+        "stravaOAuth2Api": {
+          "id": "6f2GL2qc7VE2tMo6",
+          "name": "Strava account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $json.type }}",
+              "rightValue": "Run",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a6708991-9dd2-4366-b277-13aa3dd9fc6a",
+      "name": "Filter Runs Only",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        112,
+        -176
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const runs = $input.all().map(item => {\n  const d = item.json;\n  const distance_km = d.distance / 1000;\n  const moving_time_min = d.moving_time / 60;\n  \n  return {\n    json: {\n      id: d.id,\n      name: d.name,\n      start_date: d.start_date_local ? d.start_date_local.split('T')[0] : null,\n      start_datetime: d.start_date_local,\n      distance_km: Math.round(distance_km * 100) / 100,\n      moving_time_min: Math.round(moving_time_min * 100) / 100,\n      pace_min_per_km: distance_km > 0 ? Math.round((moving_time_min / distance_km) * 100) / 100 : null,\n      elevation_gain_m: d.total_elevation_gain || 0,\n      avg_speed_kmh: d.average_speed ? Math.round(d.average_speed * 3.6 * 100) / 100 : null,\n      max_speed_kmh: d.max_speed ? Math.round(d.max_speed * 3.6 * 100) / 100 : null,\n      avg_heartrate: d.average_heartrate || null,\n      max_heartrate: d.max_heartrate || null,\n      avg_cadence: d.average_cadence || null,\n      suffer_score: d.suffer_score || null,\n      elapsed_time_min: d.elapsed_time ? Math.round(d.elapsed_time / 60 * 100) / 100 : null,\n      workout_type: d.workout_type || null\n    }\n  };\n});\n\nreturn runs;"
+      },
+      "id": "50a7a6c0-5e21-4d7d-ba02-dde55ef54f5e",
+      "name": "Transform to Analysis Format",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        -176
+      ]
+    },
+    {
+      "parameters": {
+        "options": {
+          "headerRow": true
+        }
+      },
+      "id": "ffae61f0-8b03-446c-a93b-2740f707d603",
+      "name": "Convert to CSV",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        -176
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "strava_runs_bulk.csv",
+        "options": {}
+      },
+      "id": "f77e6bdd-717e-4416-8e9f-a0039bedb6e4",
+      "name": "Save CSV File",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        784,
+        -176
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Start Bulk Extract": {
+      "main": [
+        [
+          {
+            "node": "Get All Activities",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get All Activities": {
+      "main": [
+        [
+          {
+            "node": "Filter Runs Only",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Runs Only": {
+      "main": [
+        [
+          {
+            "node": "Transform to Analysis Format",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform to Analysis Format": {
+      "main": [
+        [
+          {
+            "node": "Convert to CSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to CSV": {
+      "main": [
+        [
+          {
+            "node": "Save CSV File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "6427e667-032d-4b3b-a2d1-48b214dfda8b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "74749c04e8013dbd1bd718052e52bd30815cbd8e3e4fae0947221388b864986d"
+  },
+  "id": "EUBe9ORscu9ggllj",
+  "tags": []
+}

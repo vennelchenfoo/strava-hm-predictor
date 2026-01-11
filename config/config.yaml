@@ -1,0 +1,23 @@
+project:
+  name: "Strava Half Marathon Predictor"
+  author: "Vennel Chenfoo"
+  version: "0.1.0"
+
+paths:
+  raw_data: "data/raw"
+  processed_data: "data/processed"
+  models: "models"
+  figures: "reports/figures"
+
+race:
+  target_event: "Half Marathon"
+  target_date: "2026-09-20"
+  target_distance_km: 21.0975
+
+features:
+  rolling_windows: [7, 14, 30, 60]
+  pace_zones:
+    easy: 6.5        # min/km slower than this
+    moderate: 5.5    # between easy and moderate
+    tempo: 5.0       # between moderate and tempo
+    threshold: 4.5   # faster than this
