@@ -27,7 +27,7 @@
       ],
       "credentials": {
         "stravaOAuth2Api": {
-          "id": "6f2GL2qc7VE2tMo6",
+          "id": "your_strava_api_key",
           "name": "Strava account"
         }
       }
